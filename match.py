@@ -32,15 +32,15 @@ class MatcherEngine:
     def _load_model(self):
         """内部方法：加载模型"""
         if not os.path.exists(self.model_path):
-            raise FileNotFoundError(f"❌ 模型文件未找到: {self.model_path}")
+            raise FileNotFoundError(f"[ERROR] 模型文件未找到: {self.model_path}")
 
-        print(f"🚀 正在加载匹配模型... (路径: {self.model_path})")
+        print(f"正在加载匹配模型...（路径: {self.model_path}）")
         try:
             # device='cpu' 可改为 'cuda' 如果有显卡
             self.model = SentenceTransformer(self.model_path, device='cpu')
-            print("✅ 模型加载成功，引擎就绪。")
+            print("模型加载成功，引擎就绪。")
         except Exception as e:
-            print(f"❌ 模型加载失败: {e}")
+            print(f"[ERROR] 模型加载失败: {e}")
             raise e
 
     def _parse_time(self, time_str: str) -> Tuple[Optional[datetime], Optional[datetime]]:
