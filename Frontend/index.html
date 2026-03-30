@@ -225,12 +225,13 @@
         <div style="display: flex; gap: 10px;">
             <button id="todo-btn" style="width: 45px; height: 45px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--accent-color); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="待办">✅</button>
             <button id="chat-btn" style="width: 45px; height: 45px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--primary-color); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="聊天">💬</button>
-            <button id="profile-btn" style="width: 45px; height: 45px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--light-text); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="个人中心">👤</button>
+            <button id="settings-btn" style="width: 45px; height: 45px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--light-text); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="设置">⚙️</button>
         </div>
         <div style="flex: 1; text-align: center; font-size: 24px; font-weight: 600; font-family: var(--font-family);">
             <input type="date" id="date-display" style="cursor: pointer; border: none; background: none; font-size: 24px; font-weight: 600; outline: none; color: var(--text-color); font-family: var(--font-family);">
         </div>
         <div style="display: flex; gap: 10px;">
+            <button id="view-summary-btn" style="width: 45px; height: 45px; font-size: 20px; border-radius: 50%; border: none; background-color: #9c27b0; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="查看总结">📝</button>
             <button id="edit-summary-btn" style="width: 45px; height: 45px; font-size: 20px; border-radius: 50%; border: none; background-color: #ff9800; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="编辑总结">✏️</button>
             <button id="add-schedule-btn" style="width: 45px; height: 45px; font-size: 28px; border-radius: 50%; border: none; background-color: var(--primary-color); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">+</button>
         </div>
@@ -392,7 +393,7 @@
 
 
         <!-- 总结查看界面 -->
-        <div id="summary-view-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 5000;">
+        <div id="summary-view-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 3000;">
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; position: relative;">
                 <button id="close-summary-view" class="close-btn" style="position: absolute; top: 15px; right: 15px;">×</button>
                 <h2 style="margin-bottom: 20px;">总结管理</h2>
@@ -409,7 +410,7 @@
         </div>
 
         <!-- 总结编辑界面 -->
-        <div id="summary-edit-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 5000;">
+        <div id="summary-edit-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 3000;">
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative;">
                 <button id="close-summary-edit" class="close-btn" style="position: absolute; top: 15px; right: 15px;">×</button>
                 <h2 style="margin-bottom: 20px;">编辑总结</h2>
@@ -472,180 +473,14 @@
         </div>
     </div>
 
-    <!-- 个人中心页面 -->
-    <div id="profile-page" class="container" style="margin-top: 90px; display: none; transition: all 0.5s ease;">
+    <!-- 设置页面 -->
+    <div id="settings-page" class="container" style="margin-top: 90px; display: none; transition: all 0.5s ease;">
         <div style="display: flex; align-items: center; margin-bottom: 20px;">
-            <button id="back-from-profile" style="width: 40px; height: 40px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--light-text); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; margin-right: 15px;" title="返回">←</button>
-            <h2>个人中心</h2>
+            <button id="back-from-settings" style="width: 40px; height: 40px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--light-text); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; margin-right: 15px;" title="返回">←</button>
+            <h2>设置</h2>
         </div>
-        <div id="profile-content">
-            <!-- 个人中心内容 -->
-            <div style="background-color: var(--card-background); border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 20px;">
-                <h3 style="margin-bottom: 15px; color: var(--text-color);">个人账户</h3>
-                <div id="user-info" style="display: flex; align-items: center; gap: 15px; cursor: pointer;">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 32px; color: white;">👤</div>
-                    <div id="user-details">
-                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 5px;">用户名</div>
-                        <div style="color: var(--light-text);">点击编辑个人资料</div>
-                    </div>
-                </div>
-                <div id="login-prompt" style="display: none; padding: 20px; background-color: var(--background-color); border-radius: 8px; text-align: center; cursor: pointer;">
-                    <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--text-color);">请先登录</div>
-                    <div style="color: var(--light-text);">点击此处登录或注册</div>
-                </div>
-            </div>
-            
-            <div style="background-color: var(--card-background); border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 20px;">
-                <h3 style="margin-bottom: 15px; color: var(--text-color);">功能菜单</h3>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 8px; background-color: var(--background-color); cursor: pointer; transition: all 0.3s ease;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 18px;">⚙️</span>
-                            <span>设置</span>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div id="my-summary-btn" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 8px; background-color: var(--background-color); cursor: pointer; transition: all 0.3s ease;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 18px;">📝</span>
-                            <span>我的总结</span>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 8px; background-color: var(--background-color); cursor: pointer; transition: all 0.3s ease;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 18px;">📅</span>
-                            <span>我的日程</span>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 8px; background-color: var(--background-color); cursor: pointer; transition: all 0.3s ease;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 18px;">✅</span>
-                            <span>待办事项</span>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div id="logout-btn" style="display: none; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 8px; background-color: #ffebee; cursor: pointer; transition: all 0.3s ease;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 18px;">🚪</span>
-                                <span>退出登录</span>
-                            </div>
-                            <span>→</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="background-color: var(--card-background); border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 20px;">
-                <h3 style="margin-bottom: 15px; color: var(--text-color);">关于</h3>
-                <div style="color: var(--light-text); line-height: 1.5;">
-                    <div>版本: 1.0.0</div>
-                    <div>更新日期: 2026-03-26</div>
-                    <div style="margin-top: 10px;">离线日程表 - 您的个人时间管理助手</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 总结管理页面 -->
-    <div id="summary-page" class="container" style="margin-top: 90px; display: none; transition: all 0.5s ease;">
-        <div style="display: flex; align-items: center; margin-bottom: 20px;">
-            <button id="back-from-summary" style="width: 40px; height: 40px; font-size: 20px; border-radius: 50%; border: none; background-color: var(--light-text); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; margin-right: 15px;" title="返回">←</button>
-            <h2>总结管理</h2>
-        </div>
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <button id="page-tab-daily" class="summary-tab" style="padding: 10px 20px; border: none; border-radius: 4px; background-color: #4CAF50; color: white; cursor: pointer; transition: all 0.3s ease;">每日总结</button>
-            <button id="page-tab-weekly" class="summary-tab" style="padding: 10px 20px; border: none; border-radius: 4px; background-color: #2196F3; color: white; cursor: pointer; transition: all 0.3s ease;">周总结</button>
-            <button id="page-tab-monthly" class="summary-tab" style="padding: 10px 20px; border: none; border-radius: 4px; background-color: #ff9800; color: white; cursor: pointer; transition: all 0.3s ease;">月度总结</button>
-            <button id="page-tab-yearly" class="summary-tab" style="padding: 10px 20px; border: none; border-radius: 4px; background-color: #9c27b0; color: white; cursor: pointer; transition: all 0.3s ease;">年度总结</button>
-        </div>
-        <div id="page-summary-content" style="padding: 20px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
-            <!-- 总结内容将通过JavaScript动态加载 -->
-        </div>
-    </div>
-
-        <!-- 登录/注册模态框 -->
-    <div id="auth-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 2000; backdrop-filter: blur(5px);">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: var(--card-background); padding: 25px; border-radius: var(--border-radius); width: 90%; max-width: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: relative;">
-            <button id="auth-close" class="close-btn" style="position: absolute; top: 15px; right: 15px;">×</button>
-            <h2 id="auth-title" style="margin-bottom: 20px; color: var(--text-color); font-weight: 600; text-align: center;">登录</h2>
-            
-            <!-- 标签切换 -->
-            <div style="display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color);">
-                <button id="login-tab" class="auth-tab" style="flex: 1; padding: 10px; border: none; background: none; font-size: 16px; font-weight: 600; color: var(--primary-color); border-bottom: 2px solid var(--primary-color); cursor: pointer;">登录</button>
-                <button id="register-tab" class="auth-tab" style="flex: 1; padding: 10px; border: none; background: none; font-size: 16px; font-weight: 600; color: var(--light-text); cursor: pointer;">注册</button>
-            </div>
-            
-            <!-- 登录表单 -->
-            <div id="login-form" style="display: block;">
-                <div style="margin-bottom: 20px;">
-                    <label for="login-email" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">邮箱</label>
-                    <input type="email" id="login-email" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <label for="login-password" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">密码</label>
-                    <div style="position: relative;">
-                        <input type="password" id="login-password" required style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                        <button type="button" id="toggle-login-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--light-text);">👁️</button>
-                    </div>
-                </div>
-                <div style="text-align: right; margin-bottom: 20px;">
-                    <button id="forgot-password" style="background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 14px;">忘记密码？</button>
-                </div>
-                <button id="login-submit" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background-color: var(--primary-color); color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">登录</button>
-            </div>
-            
-            <!-- 注册表单 -->
-            <div id="register-form" style="display: none;">
-                <div style="margin-bottom: 20px;">
-                    <label for="register-email" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">邮箱</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="email" id="register-email" required style="flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                        <button id="send-code" style="padding: 10px 15px; border: 1px solid var(--primary-color); border-radius: 8px; background-color: white; color: var(--primary-color); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">发送验证码</button>
-                    </div>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <label for="register-password" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">密码</label>
-                    <div style="position: relative;">
-                        <input type="password" id="register-password" required style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                        <button type="button" id="toggle-register-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--light-text);">👁️</button>
-                    </div>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <label for="register-code" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">验证码</label>
-                    <input type="text" id="register-code" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                </div>
-                <button id="register-submit" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background-color: var(--primary-color); color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">注册</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 密码重置模态框 -->
-    <div id="reset-password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 2000; backdrop-filter: blur(5px);">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: var(--card-background); padding: 25px; border-radius: var(--border-radius); width: 90%; max-width: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: relative;">
-            <button id="reset-close" class="close-btn" style="position: absolute; top: 15px; right: 15px;">×</button>
-            <h2 style="margin-bottom: 20px; color: var(--text-color); font-weight: 600; text-align: center;">重置密码</h2>
-            <div style="margin-bottom: 20px;">
-                <label for="reset-email" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">邮箱</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="email" id="reset-email" required style="flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                    <button id="send-reset-code" style="padding: 10px 15px; border: 1px solid var(--primary-color); border-radius: 8px; background-color: white; color: var(--primary-color); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">发送验证码</button>
-                </div>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label for="reset-code" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">验证码</label>
-                <input type="text" id="reset-code" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label for="reset-new-password" style="display: block; margin-bottom: 8px; color: var(--light-text); font-weight: 500;">新密码</label>
-                <div style="position: relative;">
-                    <input type="password" id="reset-new-password" required style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; color: var(--text-color);">
-                    <button type="button" id="toggle-reset-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--light-text);">👁️</button>
-                </div>
-            </div>
-            <button id="reset-submit" style="width: 100%; padding: 12px; border: none; border-radius: 8px; background-color: var(--primary-color); color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">重置密码</button>
+        <div id="settings-content">
+            <!-- 设置内容 -->
         </div>
     </div>
 

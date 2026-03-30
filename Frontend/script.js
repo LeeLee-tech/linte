@@ -3,11 +3,10 @@ let schedules = [];
 let editingId = null;
 let currentFilterDate = null;
 let currentScheduleId = null;
-// 登录状态
-let currentUser = null;
 // 场所列表
 let locations = ['酒吧', '商场', '饭店', '咖啡店', '公园', '电影院', '健身房', '图书馆', '办公室', '家', '学校', '医院', '银行', '超市', '药店', '加油站', '车站', '机场', '酒店', '餐厅', '咖啡馆', '茶馆', 'KTV', '夜总会', '游乐场', '博物馆', '美术馆', '体育馆', '游泳馆', '网球场', '篮球场', '足球场', '公园', '广场', '海滩', '山区', '湖泊', '河流', '森林', '购物中心', '百货公司', '便利店', '书店', '花店', '服装店', '电器店', '家具店', '建材市场', '汽车4S店', '修理厂', '洗车场', '停车场', '仓库', '工厂', '农场', '果园', '牧场', '温室', '实验室', '研究所', '会议室', '培训中心', '幼儿园', '小学', '中学', '大学', '职业学校', '培训机构', '驾校', '语言学校', '艺术学校', '音乐学校', '舞蹈学校', '武术学校', '瑜伽馆', '舞蹈室', '画室', '琴房', '录音棚', '摄影棚', '直播间', '工作室', '创意空间', '孵化园', '科技园', '创业园', '产业园', '工业园', '商业区', '工业区', '住宅区', '别墅区', '公寓', '宿舍', '民宿', '旅馆', '招待所', '度假村', '露营地', '房车营地', '主题公园', '水上乐园', '滑雪场', '高尔夫球场', '赛马场', '赛车场', '射击场', '射箭场', '攀岩馆', '蹦床馆', '桌游吧', '密室逃脱', '剧本杀', '轰趴馆', '棋牌室', '台球厅', '保龄球馆', '旱冰场', '溜冰场', '游泳馆', '冲浪馆', '潜水中心', '帆船俱乐部', '游艇码头', '钓鱼场', '狩猎场', '射击场', '靶场', '军事基地', '训练营', '拓展基地', '生存基地', '野营地', '徒步路线', '登山路线', '骑行路线', '跑步路线', '马拉松路线', '铁人三项路线', '赛车路线', '拉力赛路线', '自行车赛路线', '足球联赛场地', '篮球联赛场地', '排球联赛场地', '网球联赛场地', '乒乓球联赛场地', '羽毛球联赛场地', '棒球联赛场地', '橄榄球联赛场地', '曲棍球联赛场地', '手球联赛场地', '水球联赛场地', '冰球联赛场地', '滑雪比赛场地', '滑冰比赛场地', '游泳比赛场地', '跳水比赛场地', '体操比赛场地', '田径比赛场地', '举重比赛场地', '拳击比赛场地', '摔跤比赛场地', '柔道比赛场地', '跆拳道比赛场地', '武术比赛场地', '击剑比赛场地', '射击比赛场地', '射箭比赛场地', '马术比赛场地', '赛艇比赛场地', '皮划艇比赛场地', '帆船比赛场地', '冲浪比赛场地', '潜水比赛场地', '铁人三项比赛场地', '现代五项比赛场地', '冬季两项比赛场地', '雪橇比赛场地', '雪车比赛场地', '冰壶比赛场地', '短道速滑比赛场地', '速度滑冰比赛场地', '花样滑冰比赛场地', '冰球比赛场地', '滑雪比赛场地', '单板滑雪比赛场地', '自由式滑雪比赛场地', '北欧两项比赛场地', '跳台滑雪比赛场地', '越野滑雪比赛场地', '高山滑雪比赛场地', '超级大回转比赛场地', '大回转比赛场地', '回转比赛场地', '平行大回转比赛场地', '障碍追逐比赛场地', 'U型场地技巧比赛场地', '坡面障碍技巧比赛场地', '大跳台比赛场地', '空中技巧比赛场地', '雪上技巧比赛场地', '越野滑雪比赛场地', '冬季两项比赛场地', '雪橇比赛场地', '雪车比赛场地', '冰壶比赛场地'];
-API_BASE_URL = "http://15437a6f.r40.cpolar.top" ;
+const API_BASE_URL = localStorage.getItem('api-base-url') || 'http://127.0.0.1:8000';
+const AUTH_STORAGE_KEY = 'linte-auth-session';
 
 // 加载待办内容
 function loadTodoContent() {
@@ -145,9 +144,7 @@ function init() {
     setupEventListeners();
     // 加载待办内容并显示
     loadTodoContent();
-    // 检查登录状态
-    checkLoginStatus();
-    // 文档中已移除自动显示待办模态框的代码
+    document.getElementById('todo-modal').style.display = 'block';
 }
 
 // 从本地存储加载地点列表
@@ -162,12 +159,6 @@ function loadLocations() {
 function setupEventListeners() {
     // 添加日程按钮
     document.getElementById('add-schedule-btn').addEventListener('click', function() {
-        // 先回到主界面
-        document.getElementById('main-page').style.display = 'block';
-        document.getElementById('chat-page').style.display = 'none';
-        document.getElementById('profile-page').style.display = 'none';
-        document.getElementById('summary-page').style.display = 'none';
-        // 然后执行操作
         // 显示模态框
         document.getElementById('schedule-modal').style.display = 'block';
         // 设置模态框标题
@@ -241,7 +232,7 @@ function setupEventListeners() {
     });
 
     // 点击模态框空白处退出
-    const modals = ['schedule-modal', 'schedule-detail-modal', 'delete-modal', 'summary-view-modal', 'summary-edit-modal', 'chat-modal', 'todo-modal', 'add-todo-modal'];
+    const modals = ['schedule-modal', 'schedule-detail-modal', 'delete-modal', 'summary-view-modal', 'summary-edit-modal', 'chat-modal', 'settings-modal', 'todo-modal', 'add-todo-modal'];
     modals.forEach(modalId => {
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -291,18 +282,19 @@ function setupEventListeners() {
 
 
 
-
+    // 查看总结按钮
+    const viewSummaryBtn = document.getElementById('view-summary-btn');
+    if (viewSummaryBtn) {
+        viewSummaryBtn.addEventListener('click', function() {
+            document.getElementById('summary-view-modal').style.display = 'block';
+            loadSummaryTab('daily');
+        });
+    }
 
     // 编辑总结按钮
     const editSummaryBtn = document.getElementById('edit-summary-btn');
     if (editSummaryBtn) {
         editSummaryBtn.addEventListener('click', function() {
-            // 先回到主界面
-            document.getElementById('main-page').style.display = 'block';
-            document.getElementById('chat-page').style.display = 'none';
-            document.getElementById('profile-page').style.display = 'none';
-            document.getElementById('summary-page').style.display = 'none';
-            // 然后执行操作
             document.getElementById('summary-edit-modal').style.display = 'block';
             loadEditSummaryTab('daily');
         });
@@ -329,8 +321,6 @@ function setupEventListeners() {
     if (chatBtn) {
         chatBtn.addEventListener('click', function() {
             document.getElementById('main-page').style.display = 'none';
-            document.getElementById('profile-page').style.display = 'none';
-            document.getElementById('summary-page').style.display = 'none';
             document.getElementById('chat-page').style.display = 'block';
         });
     }
@@ -344,42 +334,20 @@ function setupEventListeners() {
         });
     }
 
-    // 个人中心按钮
-    const profileBtn = document.getElementById('profile-btn');
-    if (profileBtn) {
-        profileBtn.addEventListener('click', function() {
+    // 设置按钮
+    const settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', function() {
             document.getElementById('main-page').style.display = 'none';
-            document.getElementById('chat-page').style.display = 'none';
-            document.getElementById('summary-page').style.display = 'none';
-            document.getElementById('profile-page').style.display = 'block';
+            document.getElementById('settings-page').style.display = 'block';
         });
     }
 
-    // 我的总结按钮
-    const mySummaryBtn = document.getElementById('my-summary-btn');
-    if (mySummaryBtn) {
-        mySummaryBtn.addEventListener('click', function() {
-            // 打开总结管理页面，作为个人中心的下一页
-            document.getElementById('profile-page').style.display = 'none';
-            document.getElementById('summary-page').style.display = 'block';
-            loadSummaryTab('daily');
-        });
-    }
-
-    // 返回个人中心（从总结管理页面）
-    const backFromSummaryBtn = document.getElementById('back-from-summary');
-    if (backFromSummaryBtn) {
-        backFromSummaryBtn.addEventListener('click', function() {
-            document.getElementById('summary-page').style.display = 'none';
-            document.getElementById('profile-page').style.display = 'block';
-        });
-    }
-
-    // 返回主页面（从个人中心页面）
-    const backFromProfileBtn = document.getElementById('back-from-profile');
-    if (backFromProfileBtn) {
-        backFromProfileBtn.addEventListener('click', function() {
-            document.getElementById('profile-page').style.display = 'none';
+    // 返回主页面（从设置页面）
+    const backFromSettingsBtn = document.getElementById('back-from-settings');
+    if (backFromSettingsBtn) {
+        backFromSettingsBtn.addEventListener('click', function() {
+            document.getElementById('settings-page').style.display = 'none';
             document.getElementById('main-page').style.display = 'block';
         });
     }
@@ -388,12 +356,6 @@ function setupEventListeners() {
     const todoBtn = document.getElementById('todo-btn');
     if (todoBtn) {
         todoBtn.addEventListener('click', function() {
-            // 先回到主界面
-            document.getElementById('main-page').style.display = 'block';
-            document.getElementById('chat-page').style.display = 'none';
-            document.getElementById('profile-page').style.display = 'none';
-            document.getElementById('summary-page').style.display = 'none';
-            // 然后执行操作
             loadTodoContent();
             document.getElementById('todo-modal').style.display = 'block';
         });
@@ -450,9 +412,7 @@ function setupEventListeners() {
     const summaryTabs = document.querySelectorAll('.summary-tab');
     summaryTabs.forEach(tab => {
         tab.addEventListener('click', function() {
-            let tabId = this.id.replace('tab-', '');
-            // 处理新页面中的标签页ID
-            tabId = tabId.replace('page-', '');
+            const tabId = this.id.replace('tab-', '');
             loadSummaryTab(tabId);
         });
     });
@@ -493,446 +453,6 @@ function setupEventListeners() {
     }
     if (detailCloseBtn) {
         detailCloseBtn.addEventListener('click', hideDetailModal);
-    }
-
-    // 登录/注册相关事件监听器
-    setupAuthEventListeners();
-}
-
-// 设置认证相关事件监听器
-function setupAuthEventListeners() {
-    // 登录提示点击事件
-    const loginPrompt = document.getElementById('login-prompt');
-    if (loginPrompt) {
-        loginPrompt.addEventListener('click', function() {
-            document.getElementById('auth-modal').style.display = 'block';
-        });
-    }
-
-    // 用户信息点击事件（已登录状态）
-    const userInfo = document.getElementById('user-info');
-    if (userInfo) {
-        userInfo.addEventListener('click', function() {
-            if (!currentUser) {
-                document.getElementById('auth-modal').style.display = 'block';
-            }
-        });
-    }
-
-    // 登录/注册标签切换
-    const loginTab = document.getElementById('login-tab');
-    const registerTab = document.getElementById('register-tab');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const authTitle = document.getElementById('auth-title');
-
-    if (loginTab) {
-        loginTab.addEventListener('click', function() {
-            loginTab.style.color = 'var(--primary-color)';
-            loginTab.style.borderBottom = '2px solid var(--primary-color)';
-            registerTab.style.color = 'var(--light-text)';
-            registerTab.style.borderBottom = 'none';
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            authTitle.textContent = '登录';
-        });
-    }
-
-    if (registerTab) {
-        registerTab.addEventListener('click', function() {
-            registerTab.style.color = 'var(--primary-color)';
-            registerTab.style.borderBottom = '2px solid var(--primary-color)';
-            loginTab.style.color = 'var(--light-text)';
-            loginTab.style.borderBottom = 'none';
-            registerForm.style.display = 'block';
-            loginForm.style.display = 'none';
-            authTitle.textContent = '注册';
-        });
-    }
-
-    // 关闭认证模态框
-    const authClose = document.getElementById('auth-close');
-    if (authClose) {
-        authClose.addEventListener('click', function() {
-            document.getElementById('auth-modal').style.display = 'none';
-        });
-    }
-
-    // 关闭密码重置模态框
-    const resetClose = document.getElementById('reset-close');
-    if (resetClose) {
-        resetClose.addEventListener('click', function() {
-            document.getElementById('reset-password-modal').style.display = 'none';
-        });
-    }
-
-    // 忘记密码按钮
-    const forgotPassword = document.getElementById('forgot-password');
-    if (forgotPassword) {
-        forgotPassword.addEventListener('click', function() {
-            document.getElementById('auth-modal').style.display = 'none';
-            document.getElementById('reset-password-modal').style.display = 'block';
-        });
-    }
-
-    // 发送注册验证码
-    const sendCodeBtn = document.getElementById('send-code');
-    if (sendCodeBtn) {
-        sendCodeBtn.addEventListener('click', async function() {
-            const email = document.getElementById('register-email').value;
-            if (!email) {
-                alert('请输入邮箱');
-                return;
-            }
-            
-            // 立即禁用按钮，防止重复点击
-            sendCodeBtn.disabled = true;
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/send-code`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, type: 'register' })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    alert('验证码已发送');
-                    // 倒计时
-                    let countdown = 60;
-                    sendCodeBtn.textContent = `${countdown}秒后重新发送`;
-                    
-                    const timer = setInterval(() => {
-                        countdown--;
-                        sendCodeBtn.textContent = `${countdown}秒后重新发送`;
-                        if (countdown <= 0) {
-                            clearInterval(timer);
-                            sendCodeBtn.disabled = false;
-                            sendCodeBtn.textContent = '发送验证码';
-                        }
-                    }, 1000);
-                } else {
-                    alert(data.msg || '发送失败');
-                    // 请求失败时重新启用按钮
-                    sendCodeBtn.disabled = false;
-                }
-            } catch (error) {
-                console.error('发送验证码失败:', error);
-                alert('发送失败，请稍后重试');
-                // 网络错误时重新启用按钮
-                sendCodeBtn.disabled = false;
-            }
-        });
-    }
-
-    // 发送重置密码验证码
-    const sendResetCodeBtn = document.getElementById('send-reset-code');
-    if (sendResetCodeBtn) {
-        sendResetCodeBtn.addEventListener('click', async function() {
-            const email = document.getElementById('reset-email').value;
-            if (!email) {
-                alert('请输入邮箱');
-                return;
-            }
-            
-            // 立即禁用按钮，防止重复点击
-            sendResetCodeBtn.disabled = true;
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/send-code`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, type: 'reset' })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    alert('验证码已发送');
-                    // 倒计时
-                    let countdown = 60;
-                    sendResetCodeBtn.textContent = `${countdown}秒后重新发送`;
-                    
-                    const timer = setInterval(() => {
-                        countdown--;
-                        sendResetCodeBtn.textContent = `${countdown}秒后重新发送`;
-                        if (countdown <= 0) {
-                            clearInterval(timer);
-                            sendResetCodeBtn.disabled = false;
-                            sendResetCodeBtn.textContent = '发送验证码';
-                        }
-                    }, 1000);
-                } else {
-                    alert(data.msg || '发送失败');
-                    // 请求失败时重新启用按钮
-                    sendResetCodeBtn.disabled = false;
-                }
-            } catch (error) {
-                console.error('发送验证码失败:', error);
-                alert('发送失败，请稍后重试');
-                // 网络错误时重新启用按钮
-                sendResetCodeBtn.disabled = false;
-            }
-        });
-    }
-
-    // 登录提交
-    const loginSubmit = document.getElementById('login-submit');
-    if (loginSubmit) {
-        loginSubmit.addEventListener('click', async function() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            if (!email || !password) {
-                alert('请填写邮箱和密码');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    // 保存用户信息
-                    currentUser = {
-                        user_id: data.user_id,
-                        email: data.email,
-                        token: data.access_token
-                    };
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    // 更新UI
-                    updateUserInfo();
-                    document.getElementById('auth-modal').style.display = 'none';
-                    alert('登录成功');
-                } else {
-                    alert(data.detail || '登录失败');
-                }
-            } catch (error) {
-                console.error('登录失败:', error);
-                alert('登录失败，请稍后重试');
-            }
-        });
-    }
-
-    // 注册提交
-    const registerSubmit = document.getElementById('register-submit');
-    if (registerSubmit) {
-        registerSubmit.addEventListener('click', async function() {
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const code = document.getElementById('register-code').value;
-            
-            if (!email || !password || !code) {
-                alert('请填写完整信息');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password, code })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    // 保存用户信息
-                    currentUser = {
-                        user_id: data.user_id,
-                        email: data.email,
-                        token: data.access_token
-                    };
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    // 更新UI
-                    updateUserInfo();
-                    document.getElementById('auth-modal').style.display = 'none';
-                    alert('注册成功');
-                } else {
-                    alert(data.detail || '注册失败');
-                }
-            } catch (error) {
-                console.error('注册失败:', error);
-                alert('注册失败，请稍后重试');
-            }
-        });
-    }
-
-    // 重置密码提交
-    const resetSubmit = document.getElementById('reset-submit');
-    if (resetSubmit) {
-        resetSubmit.addEventListener('click', async function() {
-            const email = document.getElementById('reset-email').value;
-            const newPassword = document.getElementById('reset-new-password').value;
-            const code = document.getElementById('reset-code').value;
-            
-            if (!email || !newPassword || !code) {
-                alert('请填写完整信息');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, new_password: newPassword, code })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    document.getElementById('reset-password-modal').style.display = 'none';
-                    alert('密码重置成功');
-                } else {
-                    alert(data.detail || '重置失败');
-                }
-            } catch (error) {
-                console.error('重置密码失败:', error);
-                alert('重置失败，请稍后重试');
-            }
-        });
-    }
-
-    // 退出登录按钮
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
-            if (confirm('确定要退出登录吗？')) {
-                // 清除用户信息
-                currentUser = null;
-                localStorage.removeItem('currentUser');
-                
-                // 清除登录表单内容
-                const loginEmail = document.getElementById('login-email');
-                const loginPassword = document.getElementById('login-password');
-                if (loginEmail) loginEmail.value = '';
-                if (loginPassword) loginPassword.value = '';
-                
-                // 清除注册表单内容
-                const registerEmail = document.getElementById('register-email');
-                const registerPassword = document.getElementById('register-password');
-                const registerCode = document.getElementById('register-code');
-                if (registerEmail) registerEmail.value = '';
-                if (registerPassword) registerPassword.value = '';
-                if (registerCode) registerCode.value = '';
-                
-                // 重置验证码按钮状态
-                const sendCodeBtn = document.getElementById('send-code');
-                const sendResetCodeBtn = document.getElementById('send-reset-code');
-                if (sendCodeBtn) {
-                    sendCodeBtn.disabled = false;
-                    sendCodeBtn.textContent = '发送验证码';
-                }
-                if (sendResetCodeBtn) {
-                    sendResetCodeBtn.disabled = false;
-                    sendResetCodeBtn.textContent = '发送验证码';
-                }
-                
-                // 更新UI
-                updateUserInfo();
-                alert('已退出登录');
-            }
-        });
-    }
-
-    // 密码显示/隐藏功能
-    setupPasswordToggle();
-}
-
-// 设置密码显示/隐藏功能
-function setupPasswordToggle() {
-    // 登录密码
-    const toggleLoginPassword = document.getElementById('toggle-login-password');
-    const loginPassword = document.getElementById('login-password');
-    if (toggleLoginPassword && loginPassword) {
-        toggleLoginPassword.addEventListener('click', function() {
-            const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-            loginPassword.setAttribute('type', type);
-            toggleLoginPassword.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
-        });
-    }
-    
-    // 注册密码
-    const toggleRegisterPassword = document.getElementById('toggle-register-password');
-    const registerPassword = document.getElementById('register-password');
-    if (toggleRegisterPassword && registerPassword) {
-        toggleRegisterPassword.addEventListener('click', function() {
-            const type = registerPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-            registerPassword.setAttribute('type', type);
-            toggleRegisterPassword.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
-        });
-    }
-    
-    // 重置密码
-    const toggleResetPassword = document.getElementById('toggle-reset-password');
-    const resetPassword = document.getElementById('reset-new-password');
-    if (toggleResetPassword && resetPassword) {
-        toggleResetPassword.addEventListener('click', function() {
-            const type = resetPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-            resetPassword.setAttribute('type', type);
-            toggleResetPassword.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
-        });
-    }
-}
-
-// 检查登录状态
-function checkLoginStatus() {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-        try {
-            currentUser = JSON.parse(storedUser);
-            updateUserInfo();
-        } catch (error) {
-            console.error('解析用户信息失败:', error);
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            updateUserInfo();
-        }
-    } else {
-        updateUserInfo();
-    }
-}
-
-// 更新用户信息显示
-function updateUserInfo() {
-    const userInfo = document.getElementById('user-info');
-    const loginPrompt = document.getElementById('login-prompt');
-    const userDetails = document.getElementById('user-details');
-    const logoutBtn = document.getElementById('logout-btn');
-    
-    if (currentUser) {
-        // 已登录状态
-        userInfo.style.display = 'flex';
-        loginPrompt.style.display = 'none';
-        if (userDetails) {
-            userDetails.innerHTML = `
-                <div style="font-size: 18px; font-weight: 600; margin-bottom: 5px;">${currentUser.email}</div>
-                <div style="color: var(--light-text);">点击编辑个人资料</div>
-            `;
-        }
-        if (logoutBtn) {
-            logoutBtn.style.display = 'flex';
-        }
-    } else {
-        // 未登录状态
-        userInfo.style.display = 'none';
-        loginPrompt.style.display = 'block';
-        if (logoutBtn) {
-            logoutBtn.style.display = 'none';
-        }
     }
 }
 
@@ -1577,11 +1097,7 @@ function getMonthWeekNumber(date) {
 
 // 加载总结标签页
 function loadSummaryTab(tabType) {
-    // 检查当前是否显示总结管理页面
-    const summaryPage = document.getElementById('summary-page');
-    const contentDiv = summaryPage && summaryPage.style.display !== 'none' 
-        ? document.getElementById('page-summary-content') 
-        : document.getElementById('summary-content');
+    const contentDiv = document.getElementById('summary-content');
     let content = '';
     
     switch (tabType) {
@@ -1913,4 +1429,390 @@ function saveEditedYearSummary() {
 }
 
 // 初始化应用
+function getAuthSession() {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) {
+        return null;
+    }
+    try {
+        return JSON.parse(raw);
+    } catch (error) {
+        return null;
+    }
+}
+
+function setAuthSession(session) {
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+}
+
+function clearAuthSession() {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+}
+
+function isAuthenticated() {
+    const session = getAuthSession();
+    return !!(session && session.accessToken);
+}
+
+function getApiBaseUrl() {
+    const input = document.getElementById('api-base-url');
+    if (input && input.value.trim()) {
+        return input.value.trim().replace(/\/$/, '');
+    }
+    return (localStorage.getItem('api-base-url') || API_BASE_URL).replace(/\/$/, '');
+}
+
+function persistApiBaseUrl() {
+    localStorage.setItem('api-base-url', getApiBaseUrl());
+}
+
+async function apiRequest(path, options = {}) {
+    const session = getAuthSession();
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+    };
+
+    if (session && session.accessToken && headers.Authorization !== '') {
+        headers.Authorization = `Bearer ${session.accessToken}`;
+    } else if (headers.Authorization === '') {
+        delete headers.Authorization;
+    }
+
+    const response = await fetch(`${getApiBaseUrl()}${path}`, {
+        ...options,
+        headers
+    });
+
+    const contentType = response.headers.get('content-type') || '';
+    const payload = contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
+
+    if (!response.ok) {
+        const message = typeof payload === 'string'
+            ? payload
+            : payload.error || payload.detail || `Request failed with status ${response.status}`;
+        throw new Error(message);
+    }
+
+    return payload;
+}
+
+function scheduleToBackendPayload(schedule) {
+    return {
+        title: schedule.title,
+        date: schedule.date,
+        time_range: `${schedule.startTime}-${schedule.endTime}`,
+        location: schedule.location || '',
+        content: `${schedule.title} ${schedule.location || ''}`.trim()
+    };
+}
+
+function scheduleFromBackend(item) {
+    const range = (item.time_range || '').split('-');
+    return {
+        id: item.id,
+        title: item.title || '',
+        date: item.date || currentFilterDate,
+        startTime: range[0] || '',
+        endTime: range[1] || '',
+        location: item.location || '',
+        content: item.content || ''
+    };
+}
+
+function saveSchedules() {
+    if (!isAuthenticated()) {
+        localStorage.setItem('schedules', JSON.stringify(schedules));
+    }
+}
+
+async function loadSchedules() {
+    if (!isAuthenticated()) {
+        const storedSchedules = localStorage.getItem('schedules');
+        schedules = storedSchedules ? JSON.parse(storedSchedules) : [];
+        return;
+    }
+
+    try {
+        const payload = await apiRequest('/api/schedule');
+        schedules = Array.isArray(payload) ? payload.map(scheduleFromBackend) : [];
+    } catch (error) {
+        console.error(error);
+        alert(`加载云端日程失败: ${error.message}`);
+        schedules = [];
+    }
+}
+
+async function addSchedule() {
+    const title = document.getElementById('title').value;
+    const date = document.getElementById('date').value;
+    const startTime = document.getElementById('start-time').value;
+    const endTime = document.getElementById('end-time').value;
+    const location = document.getElementById('location').value;
+
+    if (!locations.includes(location)) {
+        locations.push(location);
+        localStorage.setItem('locations', JSON.stringify(locations));
+    }
+
+    const draft = {
+        title,
+        date,
+        startTime,
+        endTime,
+        location
+    };
+
+    try {
+        if (isAuthenticated()) {
+            const payload = scheduleToBackendPayload(draft);
+            if (editingId) {
+                const updated = await apiRequest(`/api/schedule/${editingId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+                const nextSchedule = scheduleFromBackend(updated);
+                const index = schedules.findIndex(schedule => schedule.id === editingId);
+                if (index !== -1) {
+                    schedules[index] = nextSchedule;
+                }
+            } else {
+                const created = await apiRequest('/api/schedule', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                schedules.push(scheduleFromBackend(created));
+            }
+        } else if (editingId) {
+            const index = schedules.findIndex(schedule => schedule.id === editingId);
+            if (index !== -1) {
+                schedules[index] = {
+                    ...schedules[index],
+                    ...draft
+                };
+            }
+        } else {
+            schedules.push({
+                id: Date.now().toString(),
+                ...draft
+            });
+        }
+
+        saveSchedules();
+        renderSchedules();
+        document.getElementById('schedule-modal').style.display = 'none';
+        document.getElementById('schedule-form').reset();
+        document.getElementById('location-dropdown').style.display = 'none';
+        editingId = null;
+    } catch (error) {
+        alert(`保存日程失败: ${error.message}`);
+    }
+}
+
+async function deleteSchedule(id) {
+    if (!id) {
+        const deleteModal = document.getElementById('delete-modal');
+        id = deleteModal.dataset.scheduleId;
+    }
+
+    if (!id) {
+        return;
+    }
+
+    try {
+        if (isAuthenticated()) {
+            await apiRequest(`/api/schedule/${id}`, { method: 'DELETE' });
+        }
+        schedules = schedules.filter(schedule => schedule.id !== id);
+        saveSchedules();
+        renderSchedules();
+        hideDeleteModal();
+    } catch (error) {
+        alert(`删除日程失败: ${error.message}`);
+    }
+}
+
+function renderSettingsContent() {
+    const settingsContent = document.getElementById('settings-content');
+    const session = getAuthSession();
+    const statusText = session
+        ? `已登录: ${session.email}`
+        : '当前未登录，日程将保存在本地浏览器。';
+
+    settingsContent.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <div style="padding:16px; border-radius:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-bottom:12px;">后端连接</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input id="api-base-url" type="text" value="${getApiBaseUrl()}" style="flex:1; min-width:240px; padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <button id="save-api-base-url" style="padding:10px 16px; border:none; border-radius:8px; background:#4FC3F7; color:white; cursor:pointer;">保存地址</button>
+                </div>
+                <p id="auth-status" style="margin-top:12px; color:#607D8B;">${statusText}</p>
+                <div style="margin-top:12px;">
+                    <button id="logout-btn" style="padding:10px 16px; border:none; border-radius:8px; background:#f44336; color:white; cursor:pointer; ${session ? '' : 'display:none;'}">退出登录</button>
+                </div>
+            </div>
+
+            <div style="padding:16px; border-radius:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-bottom:12px;">发送验证码</h3>
+                <div style="display:grid; gap:10px;">
+                    <input id="code-email" type="email" placeholder="邮箱" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button id="send-register-code-btn" style="padding:10px 16px; border:none; border-radius:8px; background:#4CAF50; color:white; cursor:pointer;">注册验证码</button>
+                        <button id="send-reset-code-btn" style="padding:10px 16px; border:none; border-radius:8px; background:#FF9800; color:white; cursor:pointer;">重置验证码</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding:16px; border-radius:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-bottom:12px;">注册</h3>
+                <div style="display:grid; gap:10px;">
+                    <input id="register-email" type="email" placeholder="邮箱" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <input id="register-password" type="password" placeholder="密码" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <input id="register-code" type="text" placeholder="验证码" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <button id="register-btn" style="padding:10px 16px; border:none; border-radius:8px; background:#4CAF50; color:white; cursor:pointer;">注册并登录</button>
+                </div>
+            </div>
+
+            <div style="padding:16px; border-radius:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-bottom:12px;">登录</h3>
+                <div style="display:grid; gap:10px;">
+                    <input id="login-email" type="email" placeholder="邮箱" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <input id="login-password" type="password" placeholder="密码" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <button id="login-btn" style="padding:10px 16px; border:none; border-radius:8px; background:#2196F3; color:white; cursor:pointer;">登录</button>
+                </div>
+            </div>
+
+            <div style="padding:16px; border-radius:12px; background:white; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="margin-bottom:12px;">重置密码</h3>
+                <div style="display:grid; gap:10px;">
+                    <input id="reset-email" type="email" placeholder="邮箱" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <input id="reset-password" type="password" placeholder="新密码" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <input id="reset-code" type="text" placeholder="验证码" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
+                    <button id="reset-btn" style="padding:10px 16px; border:none; border-radius:8px; background:#9C27B0; color:white; cursor:pointer;">重置密码</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function syncAuthStatusText() {
+    const statusNode = document.getElementById('auth-status');
+    const logoutBtn = document.getElementById('logout-btn');
+    if (!statusNode || !logoutBtn) {
+        return;
+    }
+
+    const session = getAuthSession();
+    statusNode.textContent = session
+        ? `已登录: ${session.email}，当前日程会和 Go 后端同步。`
+        : '当前未登录，日程将保存在本地浏览器。';
+    logoutBtn.style.display = session ? 'inline-flex' : 'none';
+}
+
+async function handleAuthSuccess(payload) {
+    setAuthSession({
+        userId: payload.user_id,
+        email: payload.email,
+        accessToken: payload.access_token
+    });
+    syncAuthStatusText();
+    await loadSchedules();
+    renderSchedules();
+}
+
+function setupSettingsActions() {
+    const settingsContent = document.getElementById('settings-content');
+    settingsContent.addEventListener('click', async function(event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) {
+            return;
+        }
+
+        try {
+            if (target.id === 'save-api-base-url') {
+                persistApiBaseUrl();
+                alert('后端地址已保存');
+            }
+
+            if (target.id === 'send-register-code-btn' || target.id === 'send-reset-code-btn') {
+                const email = document.getElementById('code-email').value.trim();
+                const type = target.id === 'send-register-code-btn' ? 'register' : 'reset';
+                await apiRequest('/api/auth/send-code', {
+                    method: 'POST',
+                    headers: { Authorization: '' },
+                    body: JSON.stringify({ email, type })
+                });
+                alert('验证码已发送或已在服务端生成');
+            }
+
+            if (target.id === 'register-btn') {
+                const payload = await apiRequest('/api/auth/register', {
+                    method: 'POST',
+                    headers: { Authorization: '' },
+                    body: JSON.stringify({
+                        email: document.getElementById('register-email').value.trim(),
+                        password: document.getElementById('register-password').value,
+                        code: document.getElementById('register-code').value.trim()
+                    })
+                });
+                await handleAuthSuccess(payload);
+                alert('注册成功');
+            }
+
+            if (target.id === 'login-btn') {
+                const payload = await apiRequest('/api/auth/login', {
+                    method: 'POST',
+                    headers: { Authorization: '' },
+                    body: JSON.stringify({
+                        email: document.getElementById('login-email').value.trim(),
+                        password: document.getElementById('login-password').value
+                    })
+                });
+                await handleAuthSuccess(payload);
+                alert('登录成功');
+            }
+
+            if (target.id === 'reset-btn') {
+                await apiRequest('/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { Authorization: '' },
+                    body: JSON.stringify({
+                        email: document.getElementById('reset-email').value.trim(),
+                        new_password: document.getElementById('reset-password').value,
+                        code: document.getElementById('reset-code').value.trim()
+                    })
+                });
+                alert('密码重置成功');
+            }
+
+            if (target.id === 'logout-btn') {
+                clearAuthSession();
+                await loadSchedules();
+                renderSettingsContent();
+                syncAuthStatusText();
+                alert('已退出登录');
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+}
+
+async function init() {
+    loadLocations();
+    updateDateDisplay();
+    checkForPeriodicSummaries();
+    setupEventListeners();
+    loadTodoContent();
+    renderSettingsContent();
+    setupSettingsActions();
+    await loadSchedules();
+    renderSchedules();
+    syncAuthStatusText();
+    document.getElementById('todo-modal').style.display = 'block';
+}
+
 init();
