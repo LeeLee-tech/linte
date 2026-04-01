@@ -1,13 +1,13 @@
-
 import math
 import time
 import logging
 from typing import Optional, Dict, List
 from dataclasses import dataclass
+# 引入统一的距离计算器，收敛重复逻辑
+from distance_calculator import DistanceCalculator, GeoPoint
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class LocationData:
@@ -30,7 +30,15 @@ class LocationData:
         return (-90 <= self.latitude <= 90 and 
                 -180 <= self.longitude <= 180 and
                 self.accuracy > 0)
-
+    
+    def to_geo_point(self, allow_match: bool = True) -> GeoPoint:
+        """转换为统一的GeoPoint，对接距离计算器"""
+        return GeoPoint(
+            user_id=self.user_id,
+            latitude=self.latitude,
+            longitude=self.longitude,
+            allow_match=allow_match
+        )
 
 class LocationOptimizer:
     """
@@ -42,6 +50,8 @@ class LocationOptimizer:
         self.location_history: Dict[str, List[LocationData]] = {}
         self.max_history = 5  # 保留最近5个位置点用于平滑
         self.max_speed = 50   # 最大合理速度 50m/s (180km/h)
+        # 引入统一的距离计算器
+        self.distance_calculator = DistanceCalculator()
         
     def optimize(self, user_id: str, raw_location: LocationData) -> Optional[LocationData]:
         """
@@ -60,7 +70,8 @@ class LocationOptimizer:
         # 3. 异常值检测（GPS漂移）
         if user_id in self.location_history and self.location_history[user_id]:
             last_valid = self.location_history[user_id][-1]
-            distance = self._calculate_distance(
+            # 复用统一的距离计算逻辑
+            distance = self.distance_calculator.haversine(
                 last_valid.latitude, last_valid.longitude,
                 raw_location.latitude, raw_location.longitude
             )
@@ -81,22 +92,6 @@ class LocationOptimizer:
             self.location_history[user_id].pop(0)
         
         return raw_location
-    
-    def _calculate_distance(self, lat1: float, lon1: float, 
-                           lat2: float, lon2: float) -> float:
-        """计算两点距离（米）- Haversine公式"""
-        R = 6371000  # 地球半径
-        
-        lat1_rad = math.radians(lat1)
-        lat2_rad = math.radians(lat2)
-        delta_lat = math.radians(lat2 - lat1)
-        delta_lon = math.radians(lon2 - lon1)
-        
-        a = (math.sin(delta_lat/2) ** 2 + 
-             math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(delta_lon/2) ** 2)
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-        
-        return R * c
     
     def _smooth_location(self, user_id: str, new_loc: LocationData) -> LocationData:
         """
@@ -151,7 +146,6 @@ class LocationOptimizer:
         """清理用户数据"""
         if user_id in self.location_history:
             del self.location_history[user_id]
-
 
 # ========== 测试代码 ==========
 if __name__ == "__main__":
